@@ -52,7 +52,14 @@ const iterate = (cursor, username, token, callback) => {
     }
   }) 
 }
-
+const byRepos = (repos) => {
+  const groupedByRepo = repos.reduce((group, currentValue) => {
+    const org = currentValue.split('/')[0]
+    group[org] = !group[org] ? 1 : group[org] + 1
+    return group
+  }, {})
+  return groupedByRepo
+}
 const done = (callback) => {
  const flatRepos = _.flatten(allRepos)
  const grouped = _.groupBy(flatRepos, r => r)
@@ -64,17 +71,15 @@ const done = (callback) => {
    info: {
      repos: {
       total: uniques.length,
-      artsy: uniques.filter(f => f.startsWith("artsy")).length,
-      cocoapods: uniques.filter(f => f.startsWith("CocoaPods")).length,
-      danger: uniques.filter(f => f.startsWith("danger")).length,
-      orta: uniques.filter(f => f.startsWith("orta")).length,
+      orgs: {
+        ...byRepos(uniques)
+      }
     },
     prs:{
       total: flatRepos.length,
-      artsy: flatRepos.filter(f => f.startsWith("artsy")).length,
-      cocoapods: flatRepos.filter(f => f.startsWith("CocoaPods")).length,
-      danger: flatRepos.filter(f => f.startsWith("danger")).length,
-      orta: flatRepos.filter(f => f.startsWith("orta")).length,
+      orgs: {
+        ...byRepos(uniques)
+      }
     }
    },
    repos: sortedCounts
@@ -91,7 +96,11 @@ class Form extends React.Component {
   }
   getPullRequests () {
     iterate(undefined, this.state.username, this.state.token, (data) =>{
-      this.setState({total: data.info.prs.total, repos: data.info.repos.total})
+      this.setState({
+        total: data.info.prs.total,
+        repos: data.info.repos.total,
+        orgs: Object.keys(data.info.repos.orgs)
+      })
     })
   }
   handleChange (e) {
@@ -119,9 +128,17 @@ class Form extends React.Component {
       </form>
       </div>
       <div className="result">
-        {this.state.total && <h1>In 2017 you created: {this.state.total} Pull requests</h1>}
-        {this.state.repos && <h1>In 2017 you contributed to: {this.state.repos} Repos</h1>}
+        {this.state.total && <h1>In 2017 you created: <br/>{this.state.total} Pull requests</h1>}
+        {this.state.repos && <h1>In 2017 you contributed to: <br/> {this.state.repos} Repos</h1>}
       </div>
+        { this.state.orgs &&
+        <div className="result">
+          <h1>Orgs you contributed to:</h1>
+          <ul>
+              {this.state.orgs.map((item, i) => <li key={i}>{item}</li>)}
+          </ul>
+        </div>
+      }      
       </div>
     )
   }

@@ -1769,6 +1769,6 @@ body>#signup #key_benefits p {
     padding-bottom: 2px;
 }
 #login #dont_have_an_account a:hover { border-bottom: 2px solid #f90 }
-
+.result { width: 750px; margin: 0 auto;}
 .result h1 { color: #fff; font-family: 'Righteous', cursive; font-size: 45px; font-weight: normal; line-height: 60px; margin: 10px 0 20px; text-transform: uppercase; text-shadow: 2px 2px 0 #000; margin: 10px 0 24px; text-align: center; }
 

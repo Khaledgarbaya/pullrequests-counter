@@ -2,7 +2,7 @@
   "name": "pullrequests-counter",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://Khaledgarbaya.github.io/pr-counter",
+  "homepage": "https://khaledgarbaya.github.io/pullrequests-counter/",
   "dependencies": {
     "lodash": "^4.17.4",
     "react": "^16.2.0",
